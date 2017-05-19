@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <Description>Utilities for hashing.</Description>
+    <AssemblyName>Ofl.Hashing</AssemblyName>
+    <PackageId>Ofl.Hashing</PackageId>
+    <PackageProjectUrl>https://github.com/OneFrameLink/Ofl.Hashing</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/OneFrameLink/Ofl.Hashing.git</RepositoryUrl>
+    <Version>1.0.0</Version>
+    <PackageTags>hashing fnv-1a fnv fowler-noll-vo</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ofl.Hashing.Abstractions\Ofl.Hashing.Abstractions.csproj" />
+  </ItemGroup>
+</Project>
