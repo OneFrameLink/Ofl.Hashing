@@ -14,6 +14,11 @@ namespace Ofl.Hashing
             if (hashAlgorithm == null) throw new ArgumentNullException(nameof(hashAlgorithm));
             if (hashCodes == null) throw new ArgumentNullException(nameof(hashCodes));
 
+            // If the hash algorithm doesn't have a hash size of four bytes, then
+            // throw.
+            if (hashAlgorithm.HashSize != 4)
+                throw new InvalidOperationException($"The { nameof(hashAlgorithm.HashSize) } parameter on the { hashAlgorithm.GetType().FullName } implementation of { typeof(IHashAlgorithm).FullName } must equal four (returned { hashAlgorithm.HashSize }).");
+
             // Cycle through the hashcodes, transforming each block that's returned.
             foreach (int hashCode in hashCodes)
             {
@@ -22,7 +27,7 @@ namespace Ofl.Hashing
                 byte[] bytes = BitConverter.GetBytes(hashCode);
 
                 // Transform the block.
-                hashAlgorithm.TransformBlock(bytes, 0, 4);
+                hashAlgorithm.TransformBlock(bytes, 0, bytes.Length);
             }
 
             // Return the hash.

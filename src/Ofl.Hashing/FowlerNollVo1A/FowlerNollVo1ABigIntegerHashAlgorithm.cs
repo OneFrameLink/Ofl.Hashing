@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using Ofl.Numerics;
 
 namespace Ofl.Hashing.FowlerNollVo1A
 {
