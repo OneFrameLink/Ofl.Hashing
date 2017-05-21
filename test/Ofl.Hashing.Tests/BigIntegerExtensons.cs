@@ -25,14 +25,14 @@ namespace Ofl.Hashing.Tests
                 {
                     // Add two and int 32 min.
                     intValue += 2;
-                    bigint = (bigint + new BigInteger(2)).Unchecked(32);
+                    bigint = (bigint + new BigInteger(2)).Unchecked(4);
 
                     // Possible overflow.
                     Assert.Equal(intValue, bigint);
 
                     // Definite overflow.
                     intValue += Int32.MaxValue;
-                    bigint = (bigint + new BigInteger(Int32.MaxValue)).Unchecked(32);
+                    bigint = (bigint + new BigInteger(Int32.MaxValue)).Unchecked(4);
 
                     // Assert.
                     Assert.Equal(intValue, bigint);
@@ -59,14 +59,14 @@ namespace Ofl.Hashing.Tests
                 {
                     // Add two and int 32 min.
                     intValue -= 2;
-                    bigint = (bigint - new BigInteger(2)).Unchecked(32);
+                    bigint = (bigint - new BigInteger(2)).Unchecked(4);
 
                     // Possible overflow.
                     Assert.Equal(intValue, bigint);
 
                     // Definite overflow.
                     intValue -= Int32.MaxValue;
-                    bigint = (bigint - new BigInteger(Int32.MaxValue)).Unchecked(32);
+                    bigint = (bigint - new BigInteger(Int32.MaxValue)).Unchecked(4);
 
                     // Assert.
                     Assert.Equal(intValue, bigint);

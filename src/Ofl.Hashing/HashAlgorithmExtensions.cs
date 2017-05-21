@@ -1,30 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Ofl.Hashing
 {
     public static class HashAlgorithmExtensions
     {
-        public static IReadOnlyCollection<byte> ComputeHash(this IHashAlgorithm hashAlgorithm, byte[] bytes) =>
+        public static int GetHashCode(this IHashAlgorithm hashAlgorithm, params int[] hashCodes) =>
+            hashAlgorithm.GetHashCode((IEnumerable<int>) hashCodes);
+
+        public static int GetHashCode(this IHashAlgorithm hashAlgorithm, IEnumerable<int> hashCodes)
+        {
+            // Validate parameters.
+            if (hashAlgorithm == null) throw new ArgumentNullException(nameof(hashAlgorithm));
+            if (hashCodes == null) throw new ArgumentNullException(nameof(hashCodes));
+
+            // Cycle through the hashcodes, transforming each block that's returned.
+            foreach (int hashCode in hashCodes)
+            {
+                // Get the bytes.
+                // TODO: Use unsafe somehow to remove allocations here.
+                byte[] bytes = BitConverter.GetBytes(hashCode);
+
+                // Transform the block.
+                hashAlgorithm.TransformBlock(bytes, 0, 4);
+            }
+
+            // Return the hash.
+            return BitConverter.ToInt32(hashAlgorithm.Hash, 0);
+        }
+
+        public static byte[] ComputeHash(this IHashAlgorithm hashAlgorithm, byte[] bytes) =>
             hashAlgorithm.ComputeHash(new ArraySegment<byte>(bytes));
 
-        public static IReadOnlyCollection<byte> ComputeHash(this IHashAlgorithm hashAlgorithm, ArraySegment<byte> bytes) =>
+        public static byte[] ComputeHash(this IHashAlgorithm hashAlgorithm, ArraySegment<byte> bytes) =>
             hashAlgorithm.ComputeHash(bytes.Array, bytes.Offset, bytes.Count);
 
-        public static IReadOnlyCollection<byte> ComputeHash(this IHashAlgorithm hashAlgorithm, byte[] bytes, int index, int count)
+        public static byte[] ComputeHash(this IHashAlgorithm hashAlgorithm, byte[] bytes, int offset, int count)
         {
             // Validate parameters.
             if (hashAlgorithm == null) throw new ArgumentNullException(nameof(hashAlgorithm));
             if (bytes == null) throw new ArgumentNullException(nameof(bytes));
 
-            throw new NotImplementedException();
+            // Transform the block.
+            hashAlgorithm.TransformBlock(bytes, offset, count);
 
-            // Create the memory stream.
-            using (var stream = new MemoryStream(bytes, index, count))
-                // Call the hash algorithm.
-                //return hashAlgorithm.ComputeHash(stream);
-                ;
+            // Return the hash.
+            return hashAlgorithm.Hash;
         }
     }
 }
